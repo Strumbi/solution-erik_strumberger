@@ -30,8 +30,6 @@ public class ProductsController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
     
-    //TODO: Dovristi FilterProducts SearchProducts
-
     [HttpGet("filter")]
     public async Task<IActionResult> FilterProducts(
         [FromQuery] string? category,

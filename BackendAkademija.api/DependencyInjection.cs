@@ -25,7 +25,8 @@ public static class DependencyInjection
                     ValidIssuer = jwtSection["Issuer"],
                     ValidAudience = jwtSection["Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSection["Secret"]!))
+                        Encoding.UTF8.GetBytes(jwtSection["Secret"]!)),
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 
