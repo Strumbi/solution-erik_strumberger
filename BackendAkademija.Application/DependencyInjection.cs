@@ -3,6 +3,7 @@ using BackendAkademija.Application.Common.Behaviors;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace BackendAkademija.Application;
 
 public static class DependencyInjection
@@ -15,10 +16,12 @@ public static class DependencyInjection
         {
             cfg.RegisterServicesFromAssembly(assembly);
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            cfg.AddOpenBehavior(typeof(ChachingBehaviour<,>));
         });
         
         services.AddValidatorsFromAssembly(assembly);
-
+        services.AddMemoryCache();
+        
         return services;
     }
 }

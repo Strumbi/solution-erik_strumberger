@@ -1,4 +1,4 @@
-namespace BackendAkademija.Application.Dto.AuthDto;
+namespace BackendAkademija.Application.Models;
 
 public record LoginResult(
     bool Success,

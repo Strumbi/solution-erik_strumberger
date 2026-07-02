@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using BackendAkademija.Application.Dto.AuthDto;
 using BackendAkademija.Application.Interfaces;
+using BackendAkademija.Application.Models;
 
 namespace BackendAkademija.Infrastructure;
 

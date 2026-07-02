@@ -1,4 +1,5 @@
 using BackendAkademija.Application.Dto.AuthDto;
+using BackendAkademija.Application.Models;
 
 namespace BackendAkademija.Application.Interfaces;
 
