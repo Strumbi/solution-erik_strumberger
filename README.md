@@ -3,9 +3,6 @@
 API middleware koji dohvaća proizvode iz vanjskih izvora (trenutno DummyJSON REST API)
 s naprednim mogućnostima filtriranja, pretrage i autentifikacije.
 
-> **AI alati**: Ovaj projekt je izrađen uz pomoć Claude AI asistenta za arhitekturalne
-> odluke i implementaciju. Prompt je dostupan u `docs/claude-prompt.md`.
-
 ---
 
 ## Tehnološki stack
