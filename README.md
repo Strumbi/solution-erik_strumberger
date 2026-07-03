@@ -45,6 +45,9 @@ Application ovisi o Domain. Ni jedan unutarnji sloj ne zna za vanjski.
 
 ## Pokretanje
 
+Postoje dva načina pokretanja: kompletno kroz Docker (preporučeno, najmanje koraka)
+ili lokalno kroz `dotnet` uz SQL Server u kontejneru.
+
 ### 1. Kloniraj repozitorij
 
 ```bash
@@ -52,10 +55,42 @@ git clone https://github.com/Strumbi/solution-erik_strumberger.git
 cd BackendAkademija
 ```
 
-### 2. Pokreni SQL Server via Docker
+### Opcija A — cijela aplikacija kroz Docker
+
+`docker-compose.yml` diže i SQL Server i API u kontejnerima, sve odjednom:
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
+```
+
+Provjeri da su oba containera gore i da je `sqlserver` `healthy`:
+
+```bash
+docker-compose ps
+```
+
+Migracije se pri startu aplikacije primjenjuju automatski (`db.Database.Migrate()`
+u `Program.cs`), pa nije potreban zaseban korak.
+
+Aplikacija je dostupna na `localhost:8080`, Swagger UI na
+`localhost:8080/swagger`.
+
+> **Napomena**: `ASPNETCORE_ENVIRONMENT` je u `docker-compose.yml` postavljen na
+> `Development` upravo zato da Swagger middleware (koji se u ovom projektu
+> registrira samo za Development environment) bude dostupan i unutar kontejnera.
+> Za pravu produkcijsku postavu, Swagger bi trebalo ili eksplicitno omogućiti
+> neovisno o environmentu ili postaviti iza autentifikacije.
+
+Za rebuild nakon promjena u kodu (Docker zna zadržati stari cache-irani layer):
+
+```bash
+docker-compose up -d --build
+```
+
+### Opcija B — lokalno pokretanje (samo SQL Server u Dockeru)
+
+```bash
+docker-compose up -d sqlserver
 ```
 
 Pričekaj da container bude `healthy`:
@@ -64,7 +99,7 @@ Pričekaj da container bude `healthy`:
 docker-compose ps
 ```
 
-### 3. Pokreni migracije
+Pokreni migracije:
 
 ```bash
 dotnet ef database update \
@@ -72,7 +107,7 @@ dotnet ef database update \
     --startup-project BackendAkademija.api
 ```
 
-### 4. Pokreni aplikaciju
+Pokreni aplikaciju:
 
 ```bash
 dotnet watch run --project BackendAkademija.api

@@ -17,5 +17,25 @@ services:
       retries: 5
       start_period: 20s
 
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=BackendAkademija;User Id=sa;Password=Pa55w.rd;TrustServerCertificate=True;
+      - Jwt__Secret=super-tajni-kljuc-koji-mora-biti-najmanje-32-znaka!
+      - Jwt__Issuer=BackendAkademija
+      - Jwt__Audience=BackendAkademijaClient
+      - Jwt__ExpiryMinutes=60
+      - Jwt__RefreshTokenExpiryDays=7
+      - DummyJson__BaseUrl=https://dummyjson.com/
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
 volumes:
   sqlserver_data:
