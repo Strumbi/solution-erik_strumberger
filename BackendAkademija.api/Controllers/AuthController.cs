@@ -18,7 +18,11 @@ public class AuthController(IAuthService authService) : ControllerBase
         
         if(!result.Success) return Unauthorized(new {result.Error});
         
-        return Ok(new {result});
+        return Ok(new
+        {
+            result.AccessToken,
+            result.RefreshToken
+        });
     }
 
     [HttpPost("refresh")]

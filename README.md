@@ -23,10 +23,12 @@ Projekt koristi **Clean Architecture** s CQRS pattern-om:
 
 ```
 src/
-├── BackendAkademija.Domain/          # Entiteti (Product, Category)
-├── BackendAkademija.Application/     # CQRS Queries, DTOs, interfejsi, validacija
-├── BackendAkademija.Infrastructure/  # DummyJSON klijent, JWT, EF, caching
-└── BackendAkademija.api/             # Controllers, middleware, DI kompozicija
+├── BackendAkademija.Domain/             # Entiteti (Product, Category)
+├── BackendAkademija.Application/        # CQRS Queries, DTOs, interfejsi, validacija
+├── BackendAkademija.Infrastructure/     # DummyJSON klijent, JWT, EF, caching
+├── BackendAkademija.api/                # Controllers, middleware, DI kompozicija
+├── BackendAkademija.UnitTests/          # Unit testovi (handleri, validatori, helperi)
+└── BackendAkademija.IntegrationTests/   # Integracijski testovi (WebApplicationFactory + Testcontainers)
 ```
 
 Ovisnosti idu samo prema unutra — Infrastructure i WebApi ovise o Application,
@@ -76,8 +78,8 @@ dotnet ef database update \
 dotnet watch run --project BackendAkademija.api
 ```
 
-Aplikacija je dostupna na `https://localhost:5162`, Swagger UI na
-`https://localhost:5162/swagger`.
+Aplikacija je dostupna na `localhost:5162`, Swagger UI na
+`localhost:5162/swagger`.
 
 ---
 
@@ -195,6 +197,33 @@ Ponavljajući pozivi s istim parametrima vraćaju cached rezultat (in-memory):
 
 ---
 
+## Testiranje
+
+Projekt sadrži dva testna projekta:
+
+- **BackendAkademija.UnitTests** – testira handlere, validatore i helper klase izolirano
+- **BackendAkademija.IntegrationTests** – testira API end-to-end kroz `WebApplicationFactory`,
+  uz pravi SQL Server podignut putem **Testcontainers** (potreban je pokrenut Docker)
+
+Pokretanje svih testova:
+
+```bash
+dotnet test
+```
+
+Pokretanje samo jednog projekta:
+
+```bash
+dotnet test BackendAkademija.UnitTests
+dotnet test BackendAkademija.IntegrationTests
+```
+
+> **Napomena**: Integracijski testovi ovise o dostupnosti Docker daemona (za Testcontainers)
+> i o vanjskom DummyJSON API-ju (login/refresh testovi), pa mogu povremeno failati ako
+> Docker nije pokrenut ili je DummyJSON nedostupan.
+
+---
+
 ## Logiranje
 
 Logovi se zapisuju u konzolu i u `Logs/` folder s dnevnom rotacijom:
@@ -233,3 +262,16 @@ Implementiran je in-memory cache za read-heavy endpointe putem MediatR Pipeline
 Behavior — caching logika je centralizirana na jednom mjestu, a ne razbacana po
 handlerima. U produkcijskom okruženju zamijenio bi se s Redis-om za podršku
 horizontal scalinga.
+
+---
+
+## Korištenje AI-ja
+
+AI alati (Claude) korišteni su tijekom razvoja za:
+
+- automatizaciju unit i integracijskih testova
+- debugiranje
+- dodavanje `AddSwaggerGen` i `JwtBearer` unutar dependency injection skripte u api sloju clean arhitekture
+- pisanje ovog README file-a (uz priloženi cijeli projekt i opis što je obvezno spomenuti u njemu)
+- generiranje Serilog postavki unutar `appsettings.json`
+- generiranje docker-compose file-a na temelju zadanih uputa (korištenje određenog image-a, prilagodba za rad na macu zbog ARM arhitekture, volume mounting radi perzistencije podataka nakon brisanja containera, implementacija healthcheck-a)
