@@ -34,6 +34,8 @@ public static class DependencyInjection
 
         services.AddSwaggerGen(c =>
         {
+         
+            
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend Akademij api", Version = "v1" });
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
@@ -58,6 +60,10 @@ public static class DependencyInjection
                     Array.Empty<string>()
                 }
             });
+            
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
         });
 
         services.AddControllers();
