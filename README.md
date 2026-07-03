@@ -48,7 +48,7 @@ Application ovisi o Domain. Ni jedan unutarnji sloj ne zna za vanjski.
 ### 1. Kloniraj repozitorij
 
 ```bash
-git clone https://github.com/Strumbi/BackendAkademija-erik_strumberger.git
+git clone https://github.com/Strumbi/solution-erik_strumberger.git
 cd BackendAkademija
 ```
 
